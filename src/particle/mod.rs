@@ -23,3 +23,23 @@ impl Particle{
 
 }
 
+pub struct Solution{
+    pub vector: Vec<(usize,usize)>,
+    pub avalue: f64
+}
+
+impl Solution{
+    pub fn new(vector: Vec<(usize,usize)>) -> Solution{
+        Solution{
+            vector,
+            avalue: 0.0
+        }
+    }
+
+    pub fn print(&self) {
+        println!(
+            "{}",
+            format!("(vector:{:?},a_value:{:?})", self.vector, self.avalue).blue()
+        );
+    }
+}

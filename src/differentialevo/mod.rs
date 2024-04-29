@@ -68,7 +68,7 @@ fn obj(position: Vec<f64>) -> Vec<f64> {
     position
 }
 
-pub struct Diferentialevo {
+pub struct Differentialevo {
     solutions: Vec<Particle>,
     problem: String,
     max_iter: usize,
@@ -78,14 +78,14 @@ pub struct Diferentialevo {
     worst_solution: Particle,
 }
 
-impl Diferentialevo {
+impl Differentialevo {
     pub fn default(
         solutions: Vec<Particle>,
         problem: String,
         max_iter: usize,
         objective: fn(Vec<f64>) -> f64,
-    ) -> Diferentialevo {
-        Diferentialevo {
+    ) -> Differentialevo {
+        Differentialevo {
             solutions,
             problem,
             max_iter,
@@ -103,8 +103,8 @@ impl Diferentialevo {
         max_iter: usize,
         constraints: fn(Vec<f64>) -> Vec<f64>,
         objective: fn(Vec<f64>) -> f64,
-    ) -> Diferentialevo {
-        Diferentialevo {
+    ) -> Differentialevo {
+        Differentialevo {
             solutions,
             problem,
             max_iter,
@@ -188,9 +188,9 @@ impl Diferentialevo {
         return v;
     }
 
-    pub fn run(&mut self)->Result<Particle, &'static str>{
+    pub fn run(&mut self)->Result<(Particle,Vec<f64>), &'static str>{
+        let mut bestavalue = vec![];
         for _ in 0..self.max_iter {
-            println!("Numero de soluciones: {}", self.solutions.len());
             for s in &self.solutions.clone() {
                 let v: Vec<Vec<f64>> = self.vec_4_mut();
                 let vmuted = mutation(v, 0.5);
@@ -199,12 +199,12 @@ impl Diferentialevo {
                 let new_solution = Particle::new(vtrial);
                 self.solutions.push(new_solution);
             }
-            println!("El numero de soluciones antes de seleccionar es: {}", self.solutions.len());
             self.update_avalue();
-            self.update_best_worst();
-            println!("El numero de soluciones despues de seleccionar es: {}", self.solutions.len());
-            
+            self.update_best_worst();      
+            bestavalue.push(self.best_solution.avalue);      
         }
-        Ok(self.best_solution.clone())
+        Ok((self.best_solution.clone(), bestavalue))
     }
 }
+
+
